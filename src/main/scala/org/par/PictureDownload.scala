@@ -8,6 +8,11 @@ import tagsoup.TagSoupHttp._
 import java.io.FileOutputStream
 import org.apache.commons.io.IOUtils
 import java.io.InputStream
+/**
+ * Downloads all images on:
+ * http://www.boschfoto.nl/html/Wallpapers/wallpapers1.html
+ * and subsequent pages. Saves it in tmp dir.
+ */
 object PictureDownload {
 
   protected val executer = new Http with thread.Safety
@@ -18,7 +23,7 @@ object PictureDownload {
       pages.par.foreach { page =>
         val images = getWallpaperImgsOfPage(page)
         images.par.foreach { img =>
-          download(img)(writeToDisk("/Users/urs/Desktop/tmp/ " + img))
+          download(img)(writeToDisk("/tmp/ " + img))
         }
       }
     }
@@ -68,30 +73,4 @@ object PictureDownload {
     node.attributes.exists(_.value.text == value)
   }
 
-
-  /*
-
-  try {
-      val xml = Http(:/("www.boschfoto.nl") / "html/Wallpapers/wallpapers1.html" as_tagsouped)
-
-      def attributeValueEquals(value: String)(node: Node) = {
-        node.attributes.exists(_.value.text == value)
-      }
-      val div = (xml \\ "_" filter attributeValueEquals("rightcontainer")) \\ "a" \\ "@href"
-      val images = div.filter(_.text.endsWith("jpg")).map(_.text.split("/").last)
-      println(images)
-
-      //2904977000,3996055000
-      measure {
-
-        images.foreach { img =>
-          val partial = writeToDisk(img)(_)
-          Http(:/("www.boschfoto.nl") / "html/Wallpapers/wallpaperfotos" / img >> partial)
-        }
-      }
-
-    } catch {
-      case e: Exception => e.printStackTrace()
-    }
-*/
 }

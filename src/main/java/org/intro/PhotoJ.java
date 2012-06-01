@@ -23,24 +23,22 @@ import scala.actors.threadpool.Arrays;
 public class PhotoJ implements CopyableJ {
 
 	final static Logger LOG = LoggerFactory.getLogger(Photo.class);
-	private final int sizeKb;
 	private final URL url;
+	private final int sizeKb;
 	private final List<Integer> ratings;
 	private final List<String> formats = Arrays.asList(new String[] { "png",
 			"jpg", "jpeg", "gif" });
 
 	public PhotoJ(String path, int sizeKb, List<Integer> ratings) {
-		super();
-		this.sizeKb = sizeKb;
 		this.url = convert(path);
+		this.sizeKb = sizeKb;
 		assertIsImage(url);
 		this.ratings = ratings;
 	}
 
 	public PhotoJ(String path, int sizeKb) {
-		super();
-		this.sizeKb = sizeKb;
 		this.url = convert(path);
+		this.sizeKb = sizeKb;
 		assertIsImage(url);
 		ratings = new ArrayList<Integer>();
 	}

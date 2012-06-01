@@ -24,7 +24,7 @@ import org.traits.Logger
  */
 case class Photo(path: String, val sizeKb: Int, val ratings: List[Int] = Nil) extends Copyable {
   //type inference
-  override val url = new URI(path).toURL
+  override val url = new URL(path)
   require( List("png", "jpg", "jpeg", "gif").exists(t => url.getFile.endsWith(t)), "Choose a valid image format")
 
   //  def copyTo(target: File) = {

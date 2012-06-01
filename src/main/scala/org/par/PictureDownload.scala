@@ -1,53 +1,36 @@
 package org.par
-import java.net._
+import java.io.File
 import java.net.URL
-import xml._
-import dispatch.Http._
-import dispatch._
-import tagsoup.TagSoupHttp._
-import java.io.FileOutputStream
-import org.apache.commons.io.IOUtils
-import java.io.InputStream
-/**
- * Downloads all images on:
- * http://www.boschfoto.nl/html/Wallpapers/wallpapers1.html
- * and subsequent pages. Saves it in tmp dir.
- */
 
-import util._
-object PictureDownload {
-  val executer = new Http with thread.Safety
+import org.apache.commons.io.FileUtils.copyURLToFile
+import Thread._
+import dispatch._
+import dispatch.tagsoup.TagSoupHttp._
+import util.measure
+object PhotoScraper {
 
   def main(args: Array[String]) {
     measure {
-      scrapeWallpapers("wallpapers1.html", "/Users/urs/Desktop/tmp/")
+      scrapeWallpapers("wallpapers1.html", "/tmp/")
     }
   }
 
   def scrapeWallpapers(fromPage: String, toDir: String) = {
-    val imgNames = fetchWallpaperImgsOfPage(fromPage)
-    imgNames.par.foreach(img => download(img, writeToDisk(toDir + img)))
+    val imgURLs = fetchWallpaperImgNamesOfPage(fromPage)
+    imgURLs.par.foreach(url => copyToDir(url, toDir))
   }
 
-  def fetchWallpaperImgsOfPage(page: String): Seq[String] = {
-    val xhtml = executer(:/("www.boschfoto.nl") / "html/Wallpapers" / page as_tagsouped)
-    val imgHrefs = ((xhtml \\ "div").filter(node => node.attributes.exists(_.value.text == "rightcontainer"))) \\ "a" \\ "@href"
-    val imgNames = imgHrefs.map(node => node.text)
-
-      .filter(href => href.endsWith("jpg"))
-
-      .map(href => href.split("/").last)
-    imgNames
+  private def fetchWallpaperImgNamesOfPage(page: String): Seq[URL] = {
+    val xhtml =  Http(:/("www.boschfoto.nl") / "html" / "Wallpapers" / page as_tagsouped)
+    val imgHrefs = xhtml \\ "a" \\ "@href"
+    imgHrefs.map(node => node.text)
+      .filter(href => href.endsWith("1025.jpg"))
+      .map(href => new URL(href))
   }
 
-  def download[T](img: String, func: InputStream => T): T = {
-    executer(:/("www.boschfoto.nl") / "html/Wallpapers/wallpaperfotos" / img >> func)
-  }
-
-  def writeToDisk(path: String)(is: InputStream) = {
-    val fos = new FileOutputStream(path)
-    IOUtils.copy(is, fos)
-    IOUtils.closeQuietly(fos)
+  private def copyToDir(url: URL, toDir: String) = {
+    println("Thread %s downloads %s to %s" format (currentThread.getName, url, toDir))
+    copyURLToFile(url, new File(toDir, url.getFile.split("/").last))
   }
 
 }

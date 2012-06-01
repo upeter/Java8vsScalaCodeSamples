@@ -1,4 +1,4 @@
-package misc
+package org.par
 import java.net._
 import java.net.URL
 import xml._
@@ -13,7 +13,7 @@ import java.io.InputStream
  * http://www.boschfoto.nl/html/Wallpapers/wallpapers1.html
  * and subsequent pages. Saves it in tmp dir.
  */
-object PicturesDownload {
+object PhotosScraper {
 
   protected val executer = new Http with thread.Safety
 
@@ -22,11 +22,12 @@ object PicturesDownload {
       scrapeAllWallpapers("wallpapers1.html", "/tmp/")
     }
   }
-
+//10919848000
+//23748137000
   def scrapeAllWallpapers(startFromPage: String, toDir: String) = {
-    val pages = getImagePages(startFromPage)
+    val pages = fetchImagePages(startFromPage)
     pages.par.foreach { page =>
-      val images = getWallpaperImgsOfPage(page)
+      val images = fetchWallpaperImgsOfPage(page)
       images.par.foreach { img =>
         download(img)(writeToDisk(toDir + img))
       }
@@ -37,7 +38,7 @@ object PicturesDownload {
     executer(:/("www.boschfoto.nl") / "html/Wallpapers/wallpaperfotos" / img >> func)
   }
 
-  def getImagePages(firstPage: String): Seq[String] = {
+  def fetchImagePages(firstPage: String): Seq[String] = {
     doWithPageContent(firstPage) { html =>
       val hrefsInArrowContainerDiv = (html \\ "_" filter attributeValueEquals("pijlcontainer")) \\ "a" \\ "@href"
       val pageNames = hrefsInArrowContainerDiv.map(_.text).filter(_.endsWith("html")).map(_.split("/").last)
@@ -45,20 +46,12 @@ object PicturesDownload {
     }
   }
 
-  def getWallpaperImgsOfPage(page: String): Seq[String] = {
+  def fetchWallpaperImgsOfPage(page: String): Seq[String] = {
     doWithPageContent(page) { html =>
       val hrefsInRightContainerDiv = (html \\ "_" filter attributeValueEquals("rightcontainer")) \\ "a" \\ "@href"
       val imgNames = hrefsInRightContainerDiv.map(_.text).filter(_.endsWith("jpg")).map(_.split("/").last)
       imgNames
     }
-  }
-
-  def measure[T](func: => T): T = {
-    val start = System.nanoTime()
-    val result = func
-    val elapsed = System.nanoTime() - start
-    println("The execution of this call took: %s ns".format(elapsed))
-    result
   }
 
   private def doWithPageContent[T](page: String)(func: NodeSeq => T) = {
@@ -76,5 +69,14 @@ object PicturesDownload {
   private def attributeValueEquals(value: String)(node: Node) = {
     node.attributes.exists(_.value.text == value)
   }
+
+    def measure[T](func: => T): T = {
+    val start = System.nanoTime()
+    val result = func
+    val elapsed = System.nanoTime() - start
+    println("The execution of this call took: %s ns".format(elapsed))
+    result
+  }
+
 
 }

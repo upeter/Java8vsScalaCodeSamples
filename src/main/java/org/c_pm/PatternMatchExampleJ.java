@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import scala.actors.threadpool.Arrays;
+
 public class PatternMatchExampleJ {
 
 private static final Pattern MAIL_ADR = Pattern.compile("([^@]+)@(.+)");
@@ -20,53 +22,35 @@ public static Object match(Object obj) {
 						+ matcher.group(2);
 			}
 		}
+		if (obj instanceof String) {
+			String value = (String) obj;
+			if(value.length() > 10) {
+				return "(3) A rather long String " + value;
+			}
+		}
 		if (obj instanceof List) {
 			List aList = (List) obj;
 			if (aList.size() > 3 && aList.get(1) instanceof Integer
 					&& ((Integer) aList.get(1)) == 3) {
-				return "(3) What is going on here?";
+				return "(4) What is going on here?";
 			}
 			if (!aList.isEmpty()) {
-				return "(4) first " + aList.get(0) + " rest "
+				return "(5) first " + aList.get(0) + " rest "
 						+ aList.subList(1, aList.size());
-			}
-		}
-		if (obj != null && obj instanceof String
-				&& ((String) obj).length() > 10) {
-			return "(5) A rather long String";
-		}
-		if (obj instanceof RequestJ) {
-			RequestJ req = (RequestJ) obj;
-			if ("GET".equals(req.getMethod())) {
-				return "(6) Get going to " + req.getPath();
 			}
 		}
 		if (obj instanceof Integer) {
 			switch ((Integer) obj) {
 			case 5:
-				return "(7) It's mambo number ...";
+				return "(6) It's mambo number ...";
 			default:
-				return "(8) All except 5";
+				return "(7) All except 5";
 			}
 		}
 	}
-	return "(9) Something else";
+	return "(8) Something else";
 }
 
-class RequestJ {
-	private String method;
-	private String path;
 
-	public String getMethod() {
-		return method;
-	}
-
-	public String getPath() {
-		return path;
-	}
-}
-
-public static void main(String[] args) {
-}
 
 }

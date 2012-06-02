@@ -7,16 +7,15 @@ object CollectionExamples {
     Photo("file:///tmp/mountain.png", 12302, List(9)),
     Photo("file:///tmp/duke.png", 50, List(6, 9, 7)));
 
-  val U = dataset.map(p => p.copy(ratings = p.ratings.sorted.reverse))
-    .sortBy(p => p.url.toString.length)
+  val no_1 = dataset.filter(p => p.sizeKb > 1000)
+    				.map(p => (p.url.toString, p.sizeKb))
+    				.toMap
+  
+  val no_2 = dataset.exists(p => p.sizeKb > 1000)
+  
+  val no_3 = dataset.map(p => p.copy(ratings = p.ratings.sorted.reverse))
+		  			.sortBy(p => p.url.toString.length)
 
-  val P = dataset.exists(p => p.sizeKb > 1000)
-
-  val N = dataset.groupBy(p => p.ratings.sum / p.ratings.size)
-
-  val F = dataset.filter(p => p.sizeKb > 1000)
-    .map(p => (p.url.toString, p.sizeKb))
-    .toMap
-
+  val no_4 = dataset.groupBy(p => p.ratings.sum / p.ratings.size)
 
 }

@@ -25,17 +25,15 @@ import scala.collection.parallel.ParSeq
  * - Add Method copyToDir(...) implicits
  * - 
  */
-case class Photo(path: String, val sizeKb: Int, val ratings: List[Int] = Nil) extends Copyable {
+case class Photo(path:String, val sizeKb:Int, val ratings:List[Int] = Nil) extends Copyable {
   //type inference
   val url = new URL(path)
-  require( List("png", "jpg", "jpeg", "gif").exists(t => url.getFile.endsWith(t)), "Choose a valid image format")
 
   //  def copyTo(target: File) = copyURLToFile(url, target)
 
   lazy val file: Option[File] = catching(classOf[Exception]) opt new File(url.toURI())
 
   def maxAndMinRate = (ratings.max, ratings.min)
-  
 }
 
 case class TextDocument(url:URL) extends Copyable
@@ -58,8 +56,11 @@ object Copyable {
 trait Copyable extends Logger{
   val url: URL
   def copyTo(target: File):File = {
-    val to = if (target.isDirectory()) new File(target, url.getFile.split("/").last) else target
-    debug("Thread %s copies %s to %s" format (currentThread.getName, url, to))
+    val to = 
+      if (target.isDirectory()) 
+    	  new File(target, url.getFile.split("/").last) 
+      else target
+    debug("%s copies %s to %s" format (currentThread.getName, url, to))
     copyURLToFile(url, to)
     to
   }

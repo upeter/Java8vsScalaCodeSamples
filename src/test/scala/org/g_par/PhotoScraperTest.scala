@@ -76,7 +76,7 @@ class PhotoScraperTest extends Specification {
     "fetch wallpaper urls of a particular page" in {
       val scraper = new PhotosScraper(initialPageURL, tmpFile) with TagSoupDummy { val xhtml = photoHrefsXhtml };
       val photos = scraper.fetchWallpaperURLsOfPage(initialPageURL)
-      todo
+      photos.size must_== 4
     }
   }
 

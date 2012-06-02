@@ -32,7 +32,7 @@ class PhotoTest extends Specification {
       Photo(validURL, 23, Nil) must not(throwA[Exception])
       Photo(invalidURL, 23, Nil) must throwA[MUE]
     }
-    "return File if URL can be converted to file" in {
+    "return None if URL can be converted to file" in {
       Photo(validFileURL, 23, Nil).file must beSome
       Photo(validURL, 23, Nil).file must beNone
     }

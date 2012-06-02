@@ -14,7 +14,8 @@ class PhotoHandler {
         files.filter(isPhoto)
           .foreach(f => callback(Photo(f.toURI.toString, -1))))
 
-  private def isPhoto(file: File) = formats.exists(ext => file.getPath.endsWith(ext))
+  private def isPhoto(file: File) = 
+    formats.exists(ext => file.getPath.endsWith(ext))
 
   //=====================
   //callbacks

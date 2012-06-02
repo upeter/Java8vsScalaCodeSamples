@@ -46,6 +46,7 @@ public class FunctionsExampleJ {
 			return false;
 		}
 
+	
 		public static void main(String[] args) {
 			File file = new File("/Users/urs/Desktop/tmp");
 			List<PhotoJ> photos = new PhotoHandlerJImperative()
@@ -56,6 +57,15 @@ public class FunctionsExampleJ {
 		}
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	// =======================================
 	// Functional 
 	// =======================================
@@ -68,7 +78,7 @@ public class FunctionsExampleJ {
 				"png", "jpg", "jpeg", "gif" });
 
 		/**
-		 * Process list
+		 * Process list directly
 		 */
 		public void doWithPhotos(File file, PhotoCallback callback) {
 			if (file.isDirectory()) {
@@ -95,6 +105,9 @@ public class FunctionsExampleJ {
 			return false;
 		}
 
+
+		
+		
 		public static void main(String[] args) {
 			File file = new File("/Users/urs/Desktop/tmp");
 			new PhotoHandlerJFunctional().doWithPhotos(file,
@@ -107,6 +120,10 @@ public class FunctionsExampleJ {
 		}
 	}
 
+	
+	
+	
+	
 	
 	
 	

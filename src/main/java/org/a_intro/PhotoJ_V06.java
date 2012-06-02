@@ -10,38 +10,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import scala.actors.threadpool.Arrays;
-
 /**
- * PhotoJ
+ * PhotoJ_V6
  */
-public class PhotoJ implements CopyableJ {
+public class PhotoJ_V06  {
 
-	final static Logger LOG = LoggerFactory.getLogger(Photo.class);
 	private final URL url;
 	private final int sizeKb;
 	private final List<Integer> ratings;
-	private final List<String> formats = Arrays.asList(new String[] { "png",
-			"jpg", "jpeg", "gif" });
 
-	public PhotoJ(String path, int sizeKb, List<Integer> ratings) {
+	public PhotoJ_V06(String path, int sizeKb, List<Integer> ratings) {
 		this.url = convert(path);
 		this.sizeKb = sizeKb;
-		assertIsImage(url);
 		this.ratings = ratings;
 	}
 
-	public PhotoJ(String path, int sizeKb) {
+	public PhotoJ_V06(String path, int sizeKb) {
 		this.url = convert(path);
 		this.sizeKb = sizeKb;
-		assertIsImage(url);
 		ratings = new ArrayList<Integer>();
 	}
 
-
+	/**
+	 * Behaviour
+	 */
 	public File copyTo(File target) throws MalformedURLException, IOException {
 		File to = target;
 		if (target.isDirectory()) {
@@ -49,24 +41,7 @@ public class PhotoJ implements CopyableJ {
 			to = new File(target, pathElements[pathElements.length - 1]);
 		}
 		copyURLToFile(url, to);
-		return to;	}
-
-	/**
-	 * Helper method for image assertion
-	 * 
-	 * @param url
-	 */
-	private void assertIsImage(URL url) {
-		boolean isImage = false;
-		for (String format : formats) {
-			if (url.getFile().endsWith(format)) {
-				isImage = true;
-			}
-		}
-		if (!isImage) {
-			throw new IllegalArgumentException(String.format(
-					"Url %s is no image", url));
-		}
+		return to;
 	}
 
 	private static URL convert(String path) {
@@ -79,9 +54,6 @@ public class PhotoJ implements CopyableJ {
 
 	public File getFile() {
 		try {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Get file for url " + url);
-			}
 			return new File(url.toURI());
 		} catch (Exception e) {
 			// wrap?

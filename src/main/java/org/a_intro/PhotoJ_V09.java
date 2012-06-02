@@ -13,75 +13,57 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import scala.actors.threadpool.Arrays;
-
 /**
- * PhotoJ
+ * PhotoJ_V09
  */
-public class PhotoJ implements CopyableJ {
+public class PhotoJ_V09 implements CopyableJ {
 
+	/** logger.. */
 	final static Logger LOG = LoggerFactory.getLogger(Photo.class);
 	private final URL url;
 	private final int sizeKb;
 	private final List<Integer> ratings;
-	private final List<String> formats = Arrays.asList(new String[] { "png",
-			"jpg", "jpeg", "gif" });
 
-	public PhotoJ(String path, int sizeKb, List<Integer> ratings) {
+	public PhotoJ_V09(String path, int sizeKb, List<Integer> ratings) {
 		this.url = convert(path);
 		this.sizeKb = sizeKb;
-		assertIsImage(url);
 		this.ratings = ratings;
 	}
 
-	public PhotoJ(String path, int sizeKb) {
+	public PhotoJ_V09(String path, int sizeKb) {
 		this.url = convert(path);
 		this.sizeKb = sizeKb;
-		assertIsImage(url);
 		ratings = new ArrayList<Integer>();
 	}
-
 
 	public File copyTo(File target) throws MalformedURLException, IOException {
 		File to = target;
 		if (target.isDirectory()) {
 			String[] pathElements = url.getFile().split("/");
 			to = new File(target, pathElements[pathElements.length - 1]);
+			LOG.debug("Copy to dir using filename: " + to);
+		}
+		if (LOG.isDebugEnabled()) {
+			LOG.info("Copy to: " + to + " ...");
 		}
 		copyURLToFile(url, to);
-		return to;	}
-
-	/**
-	 * Helper method for image assertion
-	 * 
-	 * @param url
-	 */
-	private void assertIsImage(URL url) {
-		boolean isImage = false;
-		for (String format : formats) {
-			if (url.getFile().endsWith(format)) {
-				isImage = true;
-			}
+		if (LOG.isInfoEnabled()) {
+			LOG.info("Copied successfully copied to: " + to);
 		}
-		if (!isImage) {
-			throw new IllegalArgumentException(String.format(
-					"Url %s is no image", url));
-		}
+		return to;
 	}
 
 	private static URL convert(String path) {
 		try {
 			return new URL(path);
 		} catch (MalformedURLException e) {
+			LOG.error("Path is no valid URL: " + path, e);
 			throw new IllegalArgumentException(e);
 		}
 	}
 
 	public File getFile() {
 		try {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Get file for url " + url);
-			}
 			return new File(url.toURI());
 		} catch (Exception e) {
 			// wrap?
@@ -127,5 +109,4 @@ public class PhotoJ implements CopyableJ {
 		return url;
 	}
 
-	
 }

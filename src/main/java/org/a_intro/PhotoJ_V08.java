@@ -1,7 +1,5 @@
 package org.a_intro;
 
-import static org.apache.commons.io.FileUtils.copyURLToFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -10,63 +8,50 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+class TextDocumentJ_V2 implements CopyableJ {
+	private final URL url;
 
-import scala.actors.threadpool.Arrays;
+	public TextDocumentJ_V2(URL url) {
+		this.url = url;
+	}
 
+	/**
+	 * Utility to the rescue.
+	 */
+	@Override
+	public File copyTo(File target) throws MalformedURLException, IOException {
+		return CopyUtil.copyTo(url, target);
+		
+	}
+}
+ 
 /**
- * PhotoJ
+ * PhotoJ_V8
  */
-public class PhotoJ implements CopyableJ {
+public class PhotoJ_V08 implements CopyableJ {
 
-	final static Logger LOG = LoggerFactory.getLogger(Photo.class);
 	private final URL url;
 	private final int sizeKb;
 	private final List<Integer> ratings;
-	private final List<String> formats = Arrays.asList(new String[] { "png",
-			"jpg", "jpeg", "gif" });
 
-	public PhotoJ(String path, int sizeKb, List<Integer> ratings) {
+	public PhotoJ_V08(String path, int sizeKb, List<Integer> ratings) {
 		this.url = convert(path);
 		this.sizeKb = sizeKb;
-		assertIsImage(url);
 		this.ratings = ratings;
 	}
 
-	public PhotoJ(String path, int sizeKb) {
+	public PhotoJ_V08(String path, int sizeKb) {
 		this.url = convert(path);
 		this.sizeKb = sizeKb;
-		assertIsImage(url);
 		ratings = new ArrayList<Integer>();
 	}
 
-
-	public File copyTo(File target) throws MalformedURLException, IOException {
-		File to = target;
-		if (target.isDirectory()) {
-			String[] pathElements = url.getFile().split("/");
-			to = new File(target, pathElements[pathElements.length - 1]);
-		}
-		copyURLToFile(url, to);
-		return to;	}
-
 	/**
-	 * Helper method for image assertion
-	 * 
-	 * @param url
+	 * Utility to the rescue.
 	 */
-	private void assertIsImage(URL url) {
-		boolean isImage = false;
-		for (String format : formats) {
-			if (url.getFile().endsWith(format)) {
-				isImage = true;
-			}
-		}
-		if (!isImage) {
-			throw new IllegalArgumentException(String.format(
-					"Url %s is no image", url));
-		}
+	@Override
+	public File copyTo(File target) throws MalformedURLException, IOException {
+		return CopyUtil.copyTo(url, target);
 	}
 
 	private static URL convert(String path) {
@@ -79,9 +64,6 @@ public class PhotoJ implements CopyableJ {
 
 	public File getFile() {
 		try {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Get file for url " + url);
-			}
 			return new File(url.toURI());
 		} catch (Exception e) {
 			// wrap?
@@ -127,5 +109,4 @@ public class PhotoJ implements CopyableJ {
 		return url;
 	}
 
-	
 }

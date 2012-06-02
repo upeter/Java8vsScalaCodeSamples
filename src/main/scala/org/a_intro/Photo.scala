@@ -12,7 +12,8 @@ import java.net.URL
 import java.util.Date
 import scala.util.control.Exception.catching
 import scala.collection.parallel.ParSeq
-
+import org.slf4j.{ Logger => Slf4jLogger }
+import org.slf4j.{ LoggerFactory => Slf4jLoggerFactory }
 
 /**
  * - Class definition
@@ -38,6 +39,26 @@ case class Photo(path:String, val sizeKb:Int, val ratings:List[Int] = Nil) exten
 
 case class TextDocument(url:URL) extends Copyable
 
+trait Copyable extends Logger{
+  val url: URL
+  def copyTo(target: File):File = {
+    val to = 
+      if (target.isDirectory()) 
+    	  new File(target, url.getFile.split("/").last) 
+      else target
+    debug("%s copies %s to %s" format (currentThread.getName, url, to))
+    copyURLToFile(url, to)
+    to
+  }
+}
+
+trait Logger {
+  self =>
+  val LOG = Slf4jLoggerFactory.getLogger(self.getClass);
+  def debug[T](msg: => T): Unit = if(LOG.isDebugEnabled()) LOG.debug(msg.toString())
+  def info[T](msg: => T): Unit = if(LOG.isInfoEnabled()) LOG.info(msg.toString())
+}
+
 object Copyable {
   implicit def pimpCopyableCollection2[T <: Copyable](copyable: {def foreach[U](fun:T => U):Unit}) = new {
     def copyToDir(dir: File) =
@@ -53,18 +74,9 @@ object Copyable {
   
 }
 
-trait Copyable extends Logger{
-  val url: URL
-  def copyTo(target: File):File = {
-    val to = 
-      if (target.isDirectory()) 
-    	  new File(target, url.getFile.split("/").last) 
-      else target
-    debug("%s copies %s to %s" format (currentThread.getName, url, to))
-    copyURLToFile(url, to)
-    to
-  }
-}
+
+ 
+
 
 
 

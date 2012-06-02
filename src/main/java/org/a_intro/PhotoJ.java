@@ -20,7 +20,7 @@ import scala.actors.threadpool.Arrays;
  */
 public class PhotoJ implements CopyableJ {
 
-	final static Logger LOG = LoggerFactory.getLogger(Photo.class);
+	final static Logger LOG = LoggerFactory.getLogger(PhotoJ.class);
 	private final URL url;
 	private final int sizeKb;
 	private final List<Integer> ratings;

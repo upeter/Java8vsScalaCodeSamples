@@ -1,6 +1,6 @@
 
 
-name := "Java8vsScala"
+name := "LiveCodingScalaSolution"
 
 scalaVersion := "2.9.2"
 

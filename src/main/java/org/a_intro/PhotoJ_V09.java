@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 public class PhotoJ_V09 implements CopyableJ {
 
 	/** logger.. */
-	final static Logger LOG = LoggerFactory.getLogger(Photo.class);
+	final static Logger LOG = LoggerFactory.getLogger(CopyableJ.class);
 	private final URL url;
 	private final int sizeKb;
 	private final List<Integer> ratings;

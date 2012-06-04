@@ -10,32 +10,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class TextDocumentJ implements CopyableJ {
-	private final URL url;
-
-	public TextDocumentJ(URL url) {
-		this.url = url;
-	}
-
-	/**
-	 * Oeps, duplication...
-	 */
-	@Override
-	public File copyTo(File target) throws MalformedURLException, IOException {
-		File to = target;
-		if (target.isDirectory()) {
-			String[] pathElements = url.getFile().split("/");
-			to = new File(target, pathElements[pathElements.length - 1]);
-		}
-		copyURLToFile(url, to);
-		return to;
-	}
-}
-
 /**
- * PhotoJ_V7
+ * PhotoJ_V07
  */
-public class PhotoJ_V07 implements CopyableJ {
+public class PhotoJ_V07  {
 
 	private final URL url;
 	private final int sizeKb;
@@ -54,9 +32,8 @@ public class PhotoJ_V07 implements CopyableJ {
 	}
 
 	/**
-	 * Oeps, duplication...
+	 * Behaviour
 	 */
-	@Override
 	public File copyTo(File target) throws MalformedURLException, IOException {
 		File to = target;
 		if (target.isDirectory()) {
@@ -122,4 +99,40 @@ public class PhotoJ_V07 implements CopyableJ {
 		return url;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ratings == null) ? 0 : ratings.hashCode());
+		result = prime * result + sizeKb;
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PhotoJ_V07 other = (PhotoJ_V07) obj;
+		if (ratings == null) {
+			if (other.ratings != null)
+				return false;
+		} else if (!ratings.equals(other.ratings))
+			return false;
+		if (sizeKb != other.sizeKb)
+			return false;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		} else if (!url.equals(other.url))
+			return false;
+		return true;
+	}
+
+	
+	
 }

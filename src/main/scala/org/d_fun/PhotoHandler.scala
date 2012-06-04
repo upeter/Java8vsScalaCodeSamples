@@ -10,11 +10,20 @@ class PhotoHandler {
 
   def doWithPhotos(dir: File, callback: Photo => Any): Unit =
     if (dir.isDirectory())
-      Option(dir.listFiles).map(files =>
-        files.filter(isPhoto)
-          .foreach(f => callback(Photo(f.toURI.toString, -1))))
+      Option(dir.listFiles).map { files =>
+        files.filter(isPhoto).map(f => Photo(f.toURI.toString, -1))
+          .foreach(p => callback(p))
+      }
 
-  private def isPhoto(file: File) = 
+  def doWithPhotos2(dir: File, callback: Photo => Any): Unit =
+    if (dir.isDirectory()) {
+      for (file <- dir.listFiles(); if isPhoto(file)) {
+        file.canExecute()
+        callback(Photo(file.toURI.toString, -1))
+      }
+    }
+
+  private def isPhoto(file: File) =
     formats.exists(ext => file.getPath.endsWith(ext))
 
   //=====================

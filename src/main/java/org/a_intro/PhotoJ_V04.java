@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * PhotoJ_V4
  */
-public class PhotoJ_V04  {
+public class PhotoJ_V04 {
 
 	private final URL url;
 	private final int sizeKb;
@@ -34,7 +34,7 @@ public class PhotoJ_V04  {
 			throw new IllegalArgumentException(e);
 		}
 	}
-	
+
 	/**
 	 * What to do with exception?
 	 */
@@ -60,5 +60,41 @@ public class PhotoJ_V04  {
 		return url;
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public static void main(String[] args) {
+		PhotoJ_V04 photo = new PhotoJ_V04("http://myphoto.png", 23);
+		try {
+			File file = photo.getFile();
+			if (file != null) {
+				// do something
+			}
+		} catch (RuntimeException e) {
+
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

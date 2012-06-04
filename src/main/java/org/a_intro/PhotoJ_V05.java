@@ -47,8 +47,9 @@ public class PhotoJ_V05 {
 	}
 
 	public RatingResult getMaxAndMinRate() {
-		return new RatingResult(Collections.max(ratings),
-				Collections.min(ratings));
+		return ratings.isEmpty() ?
+			 new RatingResult(Collections.max(ratings),
+				Collections.min(ratings)) : null;
 	}
 	/**
 	 * A whole class for two properties...
@@ -58,7 +59,6 @@ public class PhotoJ_V05 {
 		int minRate;
 
 		public RatingResult(int maxRate, int minRate) {
-			super();
 			this.maxRate = maxRate;
 			this.minRate = minRate;
 		}

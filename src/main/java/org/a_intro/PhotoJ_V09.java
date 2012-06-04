@@ -1,7 +1,5 @@
 package org.a_intro;
 
-import static org.apache.commons.io.FileUtils.copyURLToFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -10,16 +8,28 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+class TextDocumentJ_V2 implements CopyableJ {
+	private final URL url;
 
+	public TextDocumentJ_V2(URL url) {
+		this.url = url;
+	}
+
+	/**
+	 * Utility to the rescue.
+	 */
+	@Override
+	public File copyTo(File target) throws MalformedURLException, IOException {
+		return CopyUtil.copyTo(url, target);
+		
+	}
+}
+ 
 /**
  * PhotoJ_V09
  */
 public class PhotoJ_V09 implements CopyableJ {
 
-	/** logger.. */
-	final static Logger LOG = LoggerFactory.getLogger(CopyableJ.class);
 	private final URL url;
 	private final int sizeKb;
 	private final List<Integer> ratings;
@@ -36,28 +46,18 @@ public class PhotoJ_V09 implements CopyableJ {
 		ratings = new ArrayList<Integer>();
 	}
 
+	/**
+	 * Utility to the rescue.
+	 */
+	@Override
 	public File copyTo(File target) throws MalformedURLException, IOException {
-		File to = target;
-		if (target.isDirectory()) {
-			String[] pathElements = url.getFile().split("/");
-			to = new File(target, pathElements[pathElements.length - 1]);
-			LOG.debug("Copy to dir using filename: " + to);
-		}
-		if (LOG.isDebugEnabled()) {
-			LOG.info("Copy to: " + to + " ...");
-		}
-		copyURLToFile(url, to);
-		if (LOG.isInfoEnabled()) {
-			LOG.info("Copied successfully copied to: " + to);
-		}
-		return to;
+		return CopyUtil.copyTo(url, target);
 	}
 
 	private static URL convert(String path) {
 		try {
 			return new URL(path);
 		} catch (MalformedURLException e) {
-			LOG.error("Path is no valid URL: " + path, e);
 			throw new IllegalArgumentException(e);
 		}
 	}
@@ -107,6 +107,40 @@ public class PhotoJ_V09 implements CopyableJ {
 
 	public URL getURL() {
 		return url;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ratings == null) ? 0 : ratings.hashCode());
+		result = prime * result + sizeKb;
+		result = prime * result + ((url == null) ? 0 : url.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		PhotoJ_V09 other = (PhotoJ_V09) obj;
+		if (ratings == null) {
+			if (other.ratings != null)
+				return false;
+		} else if (!ratings.equals(other.ratings))
+			return false;
+		if (sizeKb != other.sizeKb)
+			return false;
+		if (url == null) {
+			if (other.url != null)
+				return false;
+		} else if (!url.equals(other.url))
+			return false;
+		return true;
 	}
 
 }

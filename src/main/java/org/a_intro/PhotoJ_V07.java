@@ -10,10 +10,32 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+class TextDocumentJ implements CopyableJ {
+	private final URL url;
+
+	public TextDocumentJ(URL url) {
+		this.url = url;  
+	}
+
+	/**
+	 * Oeps, duplication...
+	 */
+	@Override
+	public File copyTo(File target) throws MalformedURLException, IOException {
+		File to = target;
+		if (target.isDirectory()) {
+			String[] pathElements = url.getFile().split("/");
+			to = new File(target, pathElements[pathElements.length - 1]);
+		}
+		copyURLToFile(url, to);
+		return to;
+	}
+}
+
 /**
- * PhotoJ_V07
+ * PhotoJ
  */
-public class PhotoJ_V07  {
+public class PhotoJ_V07 implements CopyableJ {
 
 	private final URL url;
 	private final int sizeKb;
@@ -32,8 +54,9 @@ public class PhotoJ_V07  {
 	}
 
 	/**
-	 * Behaviour
+	 * Oeps, duplication...
 	 */
+	@Override
 	public File copyTo(File target) throws MalformedURLException, IOException {
 		File to = target;
 		if (target.isDirectory()) {
@@ -52,19 +75,9 @@ public class PhotoJ_V07  {
 		}
 	}
 
-	public File getFile() {
-		try {
-			return new File(url.toURI());
-		} catch (Exception e) {
-			// wrap?
-			// return null?
-			return null;
-		}
-	}
-
 	public RatingResult getMaxAndMinRate() {
-		return new RatingResult(Collections.max(ratings),
-				Collections.max(ratings));
+		return !ratings.isEmpty() ? new RatingResult(Collections.max(ratings),
+				Collections.min(ratings)) : null;
 	}
 
 	class RatingResult {
@@ -132,7 +145,7 @@ public class PhotoJ_V07  {
 			return false;
 		return true;
 	}
+	
+	
 
-	
-	
 }

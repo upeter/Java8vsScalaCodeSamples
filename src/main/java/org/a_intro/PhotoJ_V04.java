@@ -1,13 +1,13 @@
 package org.a_intro;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
- * PhotoJ_V4
+ * PhotoJ
  */
 public class PhotoJ_V04 {
 
@@ -35,17 +35,38 @@ public class PhotoJ_V04 {
 		}
 	}
 
-	/**
-	 * What to do with exception?
-	 */
-	public File getFile() {
-		try {
-			return new File(url.toURI());
-		} catch (Exception e) {
-			// wrap?
+	public RatingResult getMaxAndMinRate() {
+		if (!ratings.isEmpty()) {
+			return new RatingResult(Collections.max(ratings),
+					Collections.min(ratings));
+		} else {
 			// return null?
+			// return empty object?
+			// throw runtime exception?
 			return null;
 		}
+	}
+
+	/**
+	 * A whole class for two properties...
+	 */
+	class RatingResult {
+		int maxRate;
+		int minRate;
+
+		public RatingResult(int maxRate, int minRate) {
+			this.maxRate = maxRate;
+			this.minRate = minRate;
+		}
+
+		public int getMaxRate() {
+			return maxRate;
+		}
+
+		public int getMinRate() {
+			return minRate;
+		}
+
 	}
 
 	public int getSizeKb() {
@@ -60,41 +81,4 @@ public class PhotoJ_V04 {
 		return url;
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public static void main(String[] args) {
-		PhotoJ_V04 photo = new PhotoJ_V04("http://myphoto.png", 23);
-		try {
-			File file = photo.getFile();
-			if (file != null) {
-				// do something
-			}
-		} catch (RuntimeException e) {
-
-		}
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

@@ -5,7 +5,21 @@ import scala.collection.JavaConversions._
 
 import org.a_intro.Photo;
 
-class PhotoHandler {
+object PhotoHandler extends App {
+  private val formats = List("png", "jpg", "jpeg", "gif")
+
+   def functionalStyleFilter() = {
+   val dir = new File("/tmp")
+   val fileFilter = (f:File) => isPhoto(f)
+   dir.listFiles().filter(f => isPhoto(f))
+  }
+    
+  def isPhoto(file:File) = 
+    formats.exists((ext:String) => file.getPath.endsWith(ext))
+  
+ 
+}
+object PhotoHandler_OLD {
   private val formats = List("png", "jpg", "jpeg", "gif")
 
   def doWithPhotos(dir: File, callback: Photo => Any): Unit =

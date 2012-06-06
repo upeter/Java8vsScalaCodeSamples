@@ -18,7 +18,7 @@ import scala.actors.threadpool.Arrays;
 /**
  * PhotoJ
  */
-public class PhotoJ implements CopyableJ {
+public class PhotoJ implements CopyableJ, Comparable<PhotoJ> {
 
 	final static Logger LOG = LoggerFactory.getLogger(PhotoJ.class);
 	private final URL url;
@@ -42,14 +42,12 @@ public class PhotoJ implements CopyableJ {
 	}
 
 
-	public File copyTo(File target) throws MalformedURLException, IOException {
-		File to = target;
-		if (target.isDirectory()) {
-			String[] pathElements = url.getFile().split("/");
-			to = new File(target, pathElements[pathElements.length - 1]);
-		}
-		copyURLToFile(url, to);
-		return to;	}
+	
+	@Override
+	public int compareTo(PhotoJ that) {
+		return sizeKb - that.getSizeKb();
+	}
+
 
 	/**
 	 * Helper method for image assertion
@@ -69,30 +67,44 @@ public class PhotoJ implements CopyableJ {
 		}
 	}
 
+	
+	public File copyTo(File target) throws MalformedURLException, IOException {
+		File to = target;
+		if (target.isDirectory()) {
+			String[] pathElements = url.getFile().split("/");
+			to = new File(target, pathElements[pathElements.length - 1]);
+			LOG.debug("Copy to dir using filename: " + to);
+		}
+		if (LOG.isDebugEnabled()) {
+			LOG.info("Copy to: " + to + " ...");
+		}
+		copyURLToFile(url, to);
+		if (LOG.isInfoEnabled()) {
+			LOG.info("Copied successfully copied to: " + to);
+		}
+		return to;
+	}
+
 	private static URL convert(String path) {
 		try {
 			return new URL(path);
 		} catch (MalformedURLException e) {
+			LOG.error("Path is no valid URL: " + path, e);
 			throw new IllegalArgumentException(e);
 		}
 	}
 
 	public File getFile() {
 		try {
-			if (LOG.isDebugEnabled()) {
-				LOG.debug("Get file for url " + url);
-			}
 			return new File(url.toURI());
 		} catch (Exception e) {
-			// wrap?
-			// return null?
 			return null;
 		}
 	}
 
 	public RatingResult getMaxAndMinRate() {
-		return new RatingResult(Collections.max(ratings),
-				Collections.max(ratings));
+		return !ratings.isEmpty() ? new RatingResult(Collections.max(ratings),
+				Collections.min(ratings)) : null;
 	}
 
 	class RatingResult {

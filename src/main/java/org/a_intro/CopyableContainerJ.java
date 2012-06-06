@@ -23,6 +23,10 @@ public class CopyableContainerJ {
 			}
 		}
 	}
+	
+}
+
+class CopyableJUtil {
 	/**
 	 * Utility method
 	 */

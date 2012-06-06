@@ -1,7 +1,5 @@
 package org.a_intro;
 
-import static org.apache.commons.io.FileUtils.copyURLToFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -10,30 +8,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class TextDocumentJ implements CopyableJ {
+class TextDocumentJ_V2 implements CopyableJ {
 	private final URL url;
 
-	public TextDocumentJ(URL url) {
+	public TextDocumentJ_V2(URL url) {
 		this.url = url;
 	}
 
 	/**
-	 * Oeps, duplication...
+	 * Utility to the rescue.
 	 */
 	@Override
 	public File copyTo(File target) throws MalformedURLException, IOException {
-		File to = target;
-		if (target.isDirectory()) {
-			String[] pathElements = url.getFile().split("/");
-			to = new File(target, pathElements[pathElements.length - 1]);
-		}
-		copyURLToFile(url, to);
-		return to;
+		return CopyUtil.copyTo(url, target);
+		
 	}
 }
-
+ 
 /**
- * PhotoJ_V7
+ * PhotoJ
  */
 public class PhotoJ_V08 implements CopyableJ {
 
@@ -54,17 +47,11 @@ public class PhotoJ_V08 implements CopyableJ {
 	}
 
 	/**
-	 * Oeps, duplication...
+	 * Utility to the rescue.
 	 */
 	@Override
 	public File copyTo(File target) throws MalformedURLException, IOException {
-		File to = target;
-		if (target.isDirectory()) {
-			String[] pathElements = url.getFile().split("/");
-			to = new File(target, pathElements[pathElements.length - 1]);
-		}
-		copyURLToFile(url, to);
-		return to;
+		return CopyUtil.copyTo(url, target);
 	}
 
 	private static URL convert(String path) {
@@ -155,7 +142,5 @@ public class PhotoJ_V08 implements CopyableJ {
 			return false;
 		return true;
 	}
-	
-	
 
 }

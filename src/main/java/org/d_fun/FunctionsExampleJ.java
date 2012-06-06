@@ -1,15 +1,95 @@
 package org.d_fun;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.List; 
 
 import org.a_intro.PhotoJ;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
 
 public class FunctionsExampleJ {
 
+	private final List<String> formats = Arrays.asList(new String[] {
+			"png", "jpg", "jpeg", "gif" });
+
+	// =======================================
+	// Imperative
+	// =======================================
+	
+	public void imperativeStyleFilter() {
+		File dir = new File("/tmp");
+		List<File> photoFiles = new ArrayList<File>();
+		for(File file :dir.listFiles()) {
+			if(isPhoto(file)) {
+				photoFiles.add(file);
+			}
+		}
+		//do something useful with photo files
+	}
+	
+
+	
+	
+	
+	// =======================================
+	// Functional 
+	// =======================================
+	
+	public void functionalStyleFilter() {
+		File dir = new File("/tmp");
+		File[] photoFiles = dir.listFiles(new FileFilter() {
+			public boolean accept(File file) {
+				return isPhoto(file);
+			}
+		});
+		//do something useful with photo files
+	}
+	
+	
+	
+	private boolean isPhoto(File file) {
+		for (String ext : formats) {
+			if (file.getPath().endsWith(ext)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	private boolean isPhotoFunctional(final File file) {
+		return CollectionUtils.exists(formats, new Predicate() {
+			@Override
+			public boolean evaluate(Object extension) {
+				return file.getPath().endsWith((String)extension);
+			}
+		});
+	
+	}
+	
+	
+	
+	
+
+	
 	// =======================================
 	// Imperative
 	// =======================================

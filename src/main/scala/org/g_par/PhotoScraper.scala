@@ -25,9 +25,9 @@ class PhotosScraper(initialPageURL: String, toDir: File) extends TagSoup {
 
   def scrapeAllWallpapers() = {
     val pages = fetchPhotoPages()
-    pages.par.foreach { page =>
+    pages.foreach { page =>
       val images = fetchWallpaperURLsOfPage(page)
-      images.par.copyToDir(toDir)
+      images.copyToDir(toDir)
     }
   }
 
@@ -47,9 +47,12 @@ class PhotosScraper(initialPageURL: String, toDir: File) extends TagSoup {
 }
 
 object PhotosScraper {
-
+//865392000
+  //1113968000
+  
   def main(args: Array[String]) {
-    val initialPageURL = "http://www.boschfoto.nl/html/Wallpapers/wallpapers1.html"
+    //val initialPageURL = "http://www.boschfoto.nl/html/Wallpapers/wallpapers1.html"
+      val initialPageURL = "http://localhost:9090/wallpapers1.html"
     val tmpFile = new File("/tmp/")
     val scraper = new PhotosScraper(initialPageURL, tmpFile);
     measure {

@@ -34,7 +34,7 @@ case class Photo(path:String, val sizeKb:Int, val ratings:List[Int] = Nil) exten
 
   lazy val file: Option[File] = catching(classOf[Exception]) opt new File(url.toURI())
 
-  def maxAndMinRate = (ratings.max, ratings.min)
+  def maxAndMinRate = if(ratings.isEmpty) None else Some((ratings.max, ratings.min))
 }
 
 case class TextDocument(url:URL) extends Copyable

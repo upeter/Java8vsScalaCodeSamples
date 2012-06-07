@@ -1,6 +1,6 @@
 package org.a_intro
 
-import java.net.{ MalformedURLException => MUE}
+import java.net.{ MalformedURLException => MUE }
 import org.junit.runner.RunWith
 import org.specs2._
 import org.specs2.runner.JUnitRunner
@@ -25,29 +25,22 @@ class PhotoTest extends Specification {
 
   "A Photo" should {
     "Use auxiliary constructor" in {
-      Photo(validURL, 23, List(2,3,4)).ratings must beEqualTo(List(2,3,4))
-      Photo(validURL, 23).ratings must beEmpty
+      todo
     }
     "Validate a given URL" in {
-      Photo(validURL, 23, Nil) must not(throwA[Exception])
-      Photo(invalidURL, 23, Nil) must throwA[MUE]
+      todo
     }
     "return None if URL can be converted to file" in {
-      Photo(validFileURL, 23, Nil).file must beSome
-      Photo(validURL, 23, Nil).file must beNone
+      todo
     }
     "return max and min rating" in {
-      val p =  Photo(validFileURL, 23, List(9, 5, 6, 3, 8))
-      p.maxAndMinRate must_== (9, 3)
+      todo
     }
     "copy to tmp dir" in {
-      val p = Photo(validURL, 23)
-      val to = p.copyTo(tmpDir)
-      to exists
+      todo
     }
     "copy all to tmp dir" in {
-      List(Photo(validURL, 23), Photo(validFileURL, 45)).copyToDir(tmpDir)
-      tmpDir.list.filter(_.endsWith("png")).size must beGreaterThan(0)
+      todo
     }
 
   }

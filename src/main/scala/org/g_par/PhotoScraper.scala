@@ -17,32 +17,18 @@ import org.a_intro._
  * http://www.boschfoto.nl/html/Wallpapers/wallpapers1.html
  * and subsequent pages. Saves it in tmp dir.
  */
-trait TagSoup {
-  def getAsTagSoup(pageUrl: String): NodeSeq = Http(url(pageUrl) as_tagsouped)
-}
- 
-class PhotosScraper(initialPageURL: String, toDir: File) extends TagSoup {
+
+class PhotosScraper(initialPageURL: String, toDir: File) {
 
   def scrapeAllWallpapers() = {
-    val pages = fetchPhotoPages()
-    pages.par.foreach { page =>
-      val images = fetchWallpaperURLsOfPage(page)
-      images.par.copyToDir(toDir)
-    }
   }
 
   private[g_par] def fetchPhotoPages(): Set[String] = {
-    val xhtml = getAsTagSoup(initialPageURL)
-    val urls = ((xhtml \\ "div" \\ "a").filter(_.text.matches("""\d+""")) \\ "@href").map(_.text).toSet
-    urls + initialPageURL
+    Set.empty
   }
 
   private[g_par] def fetchWallpaperURLsOfPage(page: String): Seq[Photo] = {
-    val xhtml = getAsTagSoup(page)
-    val imgHrefs = xhtml \\ "a" \\ "@href"
-    imgHrefs.map(node => node.text)
-      .filter(href => href.endsWith("1025.jpg"))
-      .map(href => new Photo(href, -1))
+    Seq.empty
   }
 }
 

@@ -2,6 +2,7 @@ package org.f_collections
 import org.a_intro.Photo;
 
 object CollectionExamples {
+
   val dataset = List(
     Photo("file:///tmp/sunset.png", 200, List(7, 4, 5, 6, 4, 5, 6)),
     Photo("file:///tmp/mountain.png", 12302, List(9)),

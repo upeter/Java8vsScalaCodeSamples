@@ -26,57 +26,6 @@ import org.slf4j.{ LoggerFactory => Slf4jLoggerFactory }
  * - Add Method copyToDir(...) implicits
  * - 
  */
-case class Photo(path:String, val sizeKb:Int, val ratings:List[Int] = Nil) extends Copyable {
-  //type inference
+case class Photo(path:String, val sizeKb:Int, val ratings:List[Int] = Nil) {
   val url = new URL(path)
-
-  //  def copyTo(target: File) = copyURLToFile(url, target)
-
-  lazy val file: Option[File] = catching(classOf[Exception]) opt new File(url.toURI())
-
-  def maxAndMinRate = (ratings.max, ratings.min)
 }
-
-case class TextDocument(url:URL) extends Copyable
-
-trait Copyable extends Logger{
-  val url: URL
-  def copyTo(target: File):File = {
-    val to = 
-      if (target.isDirectory()) 
-    	  new File(target, url.getFile.split("/").last) 
-      else target
-    debug("%s copies %s to %s" format (currentThread.getName, url, to))
-    copyURLToFile(url, to)
-    to
-  }
-}
-
-trait Logger {
-  self =>
-  val LOG = Slf4jLoggerFactory.getLogger(self.getClass);
-  def debug[T](msg: => T): Unit = if(LOG.isDebugEnabled()) LOG.debug(msg.toString())
-  def info[T](msg: => T): Unit = if(LOG.isInfoEnabled()) LOG.info(msg.toString())
-}
-
-object Copyable {
-  implicit def pimpCopyableCollection2[T <: Copyable](copyable: {def foreach[U](fun:T => U):Unit}) = new {
-    def copyToDir(dir: File) =
-      if (dir.isDirectory) copyable.foreach(p => p.copyTo(dir))
-      else throw new IllegalArgumentException("Dir %s is not a directory." format dir.getAbsolutePath)
-  }
-  
-  implicit def pimpCopyableCollection1(copyable: Seq[Copyable]) = new {
-    def copyToDir(dir: File) =
-      if (dir.isDirectory) copyable.foreach(p => p.copyTo(dir))
-      else throw new IllegalArgumentException("Dir %s is not a directory." format dir.getAbsolutePath)
-  }
-  
-}
-
-
- 
-
-
-
-

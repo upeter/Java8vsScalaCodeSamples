@@ -84,6 +84,7 @@ private static Integer average(List<Integer> list) {
 						return average(photo.getRatings());
 					}
 				}).asMap();
+		 map.toString();
 	}
 
 	public static void main(String[] args) {

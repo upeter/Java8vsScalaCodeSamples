@@ -1,17 +1,11 @@
 package org.misc;
 
-import java.io.File;
-import java.io.FilenameFilter;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.a_intro.PhotoJ;
 
 public class FunctionsExampleOldJ {
 
+	
+	
+	
 	class AuthService {
 		public void authLDAP(String credentials) throws RuntimeException {
 			// auth

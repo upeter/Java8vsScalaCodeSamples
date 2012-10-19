@@ -24,6 +24,7 @@ public class PhotoJ implements CopyableJ {
 	private final URL url;
 	private final int sizeKb;
 	private final List<Integer> ratings;
+	@SuppressWarnings("unchecked")
 	private final List<String> formats = Arrays.asList(new String[] { "png",
 			"jpg", "jpeg", "gif" });
 

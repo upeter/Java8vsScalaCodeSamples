@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import scala.actors.threadpool.Arrays;
 
 public class PatternMatchExampleJ {
 
@@ -29,6 +28,7 @@ public static Object match(Object obj) {
 			}
 		}
 		if (obj instanceof List) {
+			@SuppressWarnings("rawtypes")
 			List aList = (List) obj;
 			if (aList.size() > 3 && aList.get(1) instanceof Integer
 					&& ((Integer) aList.get(1)) == 3) {
